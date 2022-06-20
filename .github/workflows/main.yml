@@ -103,7 +103,6 @@ jobs:
       shell: bash
       run: |
         node packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-nuget.js dist/$LIBNAME/$LIBNAME.$SEMVER.nupkg
-        node packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-nuget.js dist/$LIBNAME/$LIBNAME.$SEMVER.nupkg
       env:
         LIBNAME: Be.Vlaanderen.Basisregisters.Aws.Lambda
         SEMVER: ${{ env.RELEASE_VERSION }}
