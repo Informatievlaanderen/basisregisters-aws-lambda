@@ -1,0 +1,19 @@
+{
+  "name": "basisregisters-aws-lambda",
+  "version": "1.0.0",
+  "description": "AWS Lambda utilities for C#",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lvermeulen/basisregisters-aws-lambda.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lvermeulen/basisregisters-aws-lambda/issues"
+  },
+  "homepage": "https://github.com/lvermeulen/basisregisters-aws-lambda#readme"
+}
