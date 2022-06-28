@@ -5,6 +5,6 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
     public interface IMessageHandler
     {
-        Task HandleMessage(object? messageData, CancellationToken cancellationToken);
+        Task HandleMessage(object? messageData, MessageMetadata messageMetadata, CancellationToken cancellationToken);
     }
 }
