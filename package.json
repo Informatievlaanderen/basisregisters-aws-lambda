@@ -1,6 +1,6 @@
 {
   "name": "basisregisters-aws-lambda",
-  "version": "6.0.2",
+  "version": "1.0.0",
   "description": "AWS Lambda utilities for C#",
   "author": "Basisregisters Vlaanderen",
   "license": "MIT",
