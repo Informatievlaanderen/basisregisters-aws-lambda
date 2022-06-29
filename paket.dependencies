@@ -10,12 +10,17 @@ nuget Be.Vlaanderen.Basisregisters.MessageHandling.AwsSqs.Simple 4.1.4
 nuget Amazon.Lambda.Core 2.1.0
 nuget Amazon.Lambda.Serialization.Json 2.0.0
 nuget Amazon.Lambda.SQSEvents 2.1.0
+nuget Amazon.Lambda.TestUtilities 2.0.0
 nuget Microsoft.Extensions.Configuration.Binder 6.0.0
 nuget Microsoft.Extensions.Configuration.EnvironmentVariables 6.0.1
 nuget Microsoft.Extensions.Configuration.FileExtensions 6.0.0
 nuget Microsoft.Extensions.Configuration.Json 6.0.0
 nuget Microsoft.Extensions.DependencyInjection 6.0.0
 nuget Microsoft.Extensions.Logging 6.0.0
+
+// TEST STUFF
+nuget xunit 2.3.1
+nuget xunit.runner.visualstudio 2.3.1
 
 // BUILD STUFF
 nuget SourceLink.Embed.AllSourceFiles 2.8.3 copy_local: true
