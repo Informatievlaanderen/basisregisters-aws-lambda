@@ -51,18 +51,23 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             var sqsJsonMessage = serializer.Deserialize<SqsJsonMessage>(record.Body);
             if (sqsJsonMessage is not null)
             {
-                await ProcessSqsJsonMessage(sqsJsonMessage);
+                var groupId = record.Attributes["MessageGroupId"];
+                await ProcessSqsJsonMessage(sqsJsonMessage, new MessageMetadata
+                {
+                    Message = record,
+                    MessageGroupId = groupId
+                });
             }
 
             logger.LogDebug($"Processed message: {record.Body}");
         }
 
-        private async Task ProcessSqsJsonMessage(SqsJsonMessage sqsJsonMessage)
+        private async Task ProcessSqsJsonMessage(SqsJsonMessage sqsJsonMessage, MessageMetadata messageMetadata)
         {
             var messageData = sqsJsonMessage.Map() ?? throw new ArgumentException("SQS message data is null.");
 
             var messageHandler = _serviceProvider.GetRequiredService<IMessageHandler>();
-            await messageHandler.HandleMessage(messageData, _cancellationTokenSource.Token);
+            await messageHandler.HandleMessage(messageData, messageMetadata, _cancellationTokenSource.Token);
         }
     }
 }
