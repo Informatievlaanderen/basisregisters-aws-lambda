@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.0.0...v1.1.0) (2022-06-29)
+
+
+### Features
+
+* add metadata ([a765aed](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/a765aed5430c1af66cc5aaf541770e4c94ecc810))
+
 # 1.0.0 (2022-06-20)
 
 
