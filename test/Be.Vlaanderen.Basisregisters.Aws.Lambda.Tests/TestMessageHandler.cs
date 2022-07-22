@@ -13,12 +13,12 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
             MessageGroupIdAction = messageGroupIdAction;
         }
         
-        public async Task HandleMessage(object? messageData, IMessageMetadata messageMetadata, CancellationToken cancellationToken)
+        public async Task HandleMessage(object? messageData, MessageMetadata messageMetadata, CancellationToken cancellationToken)
         {
             await Task.Yield();
             var message = messageMetadata.Message;
             var messageGroupId = message?.Attributes["MessageGroupId"];
-            MessageGroupIdAction.Invoke(messageGroupId);
+            MessageGroupIdAction.Invoke(messageGroupId ?? string.Empty);
         }
     }
 }

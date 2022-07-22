@@ -55,7 +55,8 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
                 await ProcessSqsJsonMessage(sqsJsonMessage, new MessageMetadata
                 {
                     Message = record,
-                    MessageGroupId = groupId
+                    MessageGroupId = groupId,
+                    Logger = context.Logger
                 });
             }
 
