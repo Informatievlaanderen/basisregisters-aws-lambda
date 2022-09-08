@@ -12,7 +12,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
     public abstract class FunctionBase
     {
         private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly ServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         public IConfigureService ConfigureService { get; set; }
 
@@ -21,18 +21,12 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             _cancellationTokenSource = new CancellationTokenSource();
 
             var services = new ServiceCollection();
-            ConfigureServices(services);
-            _serviceProvider = services.BuildServiceProvider();
+            _serviceProvider = ConfigureFunctionServices(services);
 
             ConfigureService = _serviceProvider.GetRequiredService<IConfigureService>();
         }
 
-        public virtual void ConfigureServices(ServiceCollection services)
-        {
-            services.AddLogging();
-            services.AddTransient<IEnvironmentService, EnvironmentService>();
-            services.AddTransient<IConfigureService, ConfigureService>();
-        }
+        protected abstract IServiceProvider ConfigureServices(IServiceCollection services);
 
         public async Task FunctionHandler(SQSEvent sqsEvent, ILambdaContext context)
         {
@@ -40,6 +34,15 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             {
                 await ProcessMessage(record, context);
             }
+        }
+
+        private IServiceProvider ConfigureFunctionServices(IServiceCollection services)
+        {
+            services.AddLogging();
+            services.AddTransient<IEnvironmentService, EnvironmentService>();
+            services.AddTransient<IConfigureService, ConfigureService>();
+
+            return ConfigureServices(services);
         }
 
         private async Task ProcessMessage(SQSEvent.SQSMessage record, ILambdaContext context)
