@@ -12,10 +12,11 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
             MessageGroupIdAction = messageGroupIdAction;
         }
 
-        public override void ConfigureServices(ServiceCollection services)
+        protected override IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            base.ConfigureServices(services);
             services.AddTransient<IMessageHandler>(x => new TestMessageHandler(MessageGroupIdAction));
+
+            return services.BuildServiceProvider();
         }
     }
 }
