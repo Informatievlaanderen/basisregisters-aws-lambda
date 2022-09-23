@@ -44,7 +44,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
             var function = new TestFunction(
                 x => { receivedMessageGroupId = x; },
                 x => { receivedMessage = x; });
-            await function.FunctionHandler(sqsEvent, context);
+            await function.Handler(sqsEvent, context);
 
             Assert.Contains(serializedMessage, logger.Buffer.ToString());
             Assert.Equal(receivedMessageGroupId, messageGroupId);
