@@ -39,6 +39,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
         private IServiceProvider ConfigureFunctionServices(IServiceCollection services)
         {
             services.AddLogging();
+            
             services.AddTransient<IEnvironmentService, EnvironmentService>();
             services.AddTransient<IConfigureService, ConfigureService>();
 
