@@ -28,7 +28,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
         protected abstract IServiceProvider ConfigureServices(IServiceCollection services);
 
-        public async Task FunctionHandler(SQSEvent sqsEvent, ILambdaContext context)
+        public async Task Handler(SQSEvent sqsEvent, ILambdaContext context)
         {
             foreach (var record in sqsEvent.Records)
             {
