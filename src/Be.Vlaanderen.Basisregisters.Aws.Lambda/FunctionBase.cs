@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Reflection;
+
 namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
     using System;
@@ -11,13 +14,16 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
     public abstract class FunctionBase
     {
+        private readonly IEnumerable<Assembly> _messageAssemblies;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly IServiceProvider _serviceProvider;
 
         public IConfigureService ConfigureService { get; set; }
 
-        protected FunctionBase()
+        /// <param name="messageAssemblies">The assemblies in which message contracts resides.</param>
+        protected FunctionBase(IEnumerable<Assembly> messageAssemblies)
         {
+            _messageAssemblies = messageAssemblies;
             _cancellationTokenSource = new CancellationTokenSource();
 
             var services = new ServiceCollection();
@@ -69,7 +75,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
         private async Task ProcessSqsJsonMessage(SqsJsonMessage sqsJsonMessage, MessageMetadata messageMetadata)
         {
-            var messageData = sqsJsonMessage.Map() ?? throw new ArgumentException("SQS message data is null.");
+            var messageData = sqsJsonMessage.Map(_messageAssemblies) ?? throw new ArgumentException("SQS message data is null.");
 
             var messageHandler = _serviceProvider.GetRequiredService<IMessageHandler>();
             await messageHandler.HandleMessage(messageData, messageMetadata, _cancellationTokenSource.Token);

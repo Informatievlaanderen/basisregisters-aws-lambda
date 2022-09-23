@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
     using System;
@@ -23,9 +25,9 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             Data = data;
         }
 
-        public object? Map()
+        public object? Map(IEnumerable<Assembly> messageAssemblies)
         {
-            var assembly = GetAssemblyNameContainingType(Type);
+            var assembly = GetAssemblyNameContainingType(messageAssemblies, Type);
             var type = assembly?.GetType(Type);
 
             return JsonConvert.DeserializeObject(Data, type!);
@@ -47,14 +49,15 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             return new SqsJsonMessage(message.GetType().FullName!, data);
         }
 
-        private static Assembly? GetAssemblyNameContainingType(string typeName) => AppDomain.CurrentDomain.GetAssemblies()
-            .Select(x => new
-            {
-                Assembly = x,
-                Type = x.GetType(typeName, false, true)
-            })
-            .Where(x => x.Type != null)
-            .Select(x => x.Assembly)
-            .FirstOrDefault();
+        private static Assembly? GetAssemblyNameContainingType(IEnumerable<Assembly> messageAssemblies, string typeName)
+            => messageAssemblies
+                .Select(x => new
+                {
+                    Assembly = x,
+                    Type = x.GetType(typeName, false, true)
+                })
+                .Where(x => x.Type != null)
+                .Select(x => x.Assembly)
+                .FirstOrDefault();
     }
 }

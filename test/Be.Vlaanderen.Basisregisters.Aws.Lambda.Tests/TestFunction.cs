@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Reflection;
+
 namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
 {
     using System;
@@ -9,6 +12,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
         public Action<object?> MessageDataAction { get; set; }
 
         public TestFunction(Action<string> messageGroupIdAction, Action<object?> messageDataAction)
+            : base(new List<Assembly> { typeof(MockMessage).Assembly })
         {
             MessageGroupIdAction = messageGroupIdAction;
             MessageDataAction = messageDataAction;
