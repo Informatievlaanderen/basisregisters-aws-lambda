@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.2.2...v1.2.3) (2022-09-23)
+
+
+### Bug Fixes
+
+* style to trigger build ([618a375](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/618a375ab40e157837cff43d20b84e2bc14ff510))
+
 ## [1.2.2](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.2.1...v1.2.2) (2022-09-23)
 
 ## [1.2.1](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.2.0...v1.2.1) (2022-09-08)
