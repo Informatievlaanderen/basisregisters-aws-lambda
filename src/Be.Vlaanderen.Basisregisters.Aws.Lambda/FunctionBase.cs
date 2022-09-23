@@ -20,7 +20,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
         public IConfigureService ConfigureService { get; set; }
 
-        /// <param name="messageAssemblies">The assemblies in which message contracts resides.</param>
+        /// <param name="messageAssemblies">The assemblies in which message contracts reside.</param>
         protected FunctionBase(IEnumerable<Assembly> messageAssemblies)
         {
             _messageAssemblies = messageAssemblies;
