@@ -1,9 +1,8 @@
-using System.Collections.Generic;
-using System.Reflection;
-
 namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
     using System;
+    using System.Collections.Generic;
+    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
     using Amazon.Lambda.Core;
@@ -16,7 +15,8 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
     {
         private readonly IEnumerable<Assembly> _messageAssemblies;
         private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly IServiceProvider _serviceProvider;
+
+        protected IServiceProvider ServiceProvider { get; }
 
         public IConfigureService ConfigureService { get; set; }
 
@@ -27,9 +27,9 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             _cancellationTokenSource = new CancellationTokenSource();
 
             var services = new ServiceCollection();
-            _serviceProvider = ConfigureFunctionServices(services);
+            ServiceProvider = ConfigureFunctionServices(services);
 
-            ConfigureService = _serviceProvider.GetRequiredService<IConfigureService>();
+            ConfigureService = ServiceProvider.GetRequiredService<IConfigureService>();
         }
 
         protected abstract IServiceProvider ConfigureServices(IServiceCollection services);
@@ -77,7 +77,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
         {
             var messageData = sqsJsonMessage.Map(_messageAssemblies) ?? throw new ArgumentException("SQS message data is null.");
 
-            var messageHandler = _serviceProvider.GetRequiredService<IMessageHandler>();
+            var messageHandler = ServiceProvider.GetRequiredService<IMessageHandler>();
             await messageHandler.HandleMessage(messageData, messageMetadata, _cancellationTokenSource.Token);
         }
     }
