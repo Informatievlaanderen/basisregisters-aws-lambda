@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.2.4...v1.3.0) (2022-12-09)
+
+
+### Features
+
+* expose ServiceProvider to the FunctionBase implementation ([2314521](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/231452120352555f44a204970c093dd5c2d144ab))
+
 ## [1.2.4](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.2.3...v1.2.4) (2022-09-23)
 
 ## [1.2.3](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.2.2...v1.2.3) (2022-09-23)
