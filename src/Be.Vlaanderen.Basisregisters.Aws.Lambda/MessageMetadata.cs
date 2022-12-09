@@ -1,7 +1,6 @@
-using Amazon.Lambda.Core;
-
 namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
+    using Amazon.Lambda.Core;
     using Amazon.Lambda.SQSEvents;
 
     public class MessageMetadata
