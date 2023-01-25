@@ -12,7 +12,8 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
     public abstract class FunctionBase
     {
         private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly IServiceProvider _serviceProvider;
+
+        protected readonly IServiceProvider ServiceProvider;
 
         public IConfigureService ConfigureService { get; set; }
 
@@ -21,9 +22,18 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             _cancellationTokenSource = new CancellationTokenSource();
 
             var services = new ServiceCollection();
-            _serviceProvider = ConfigureFunctionServices(services);
+            ServiceProvider = ConfigureFunctionServices(services);
 
-            ConfigureService = _serviceProvider.GetRequiredService<IConfigureService>();
+            ConfigureService = ServiceProvider.GetRequiredService<IConfigureService>();
+        }
+
+        private IServiceProvider ConfigureFunctionServices(IServiceCollection services)
+        {
+            services.AddLogging();
+            services.AddTransient<IEnvironmentService, EnvironmentService>();
+            services.AddTransient<IConfigureService, ConfigureService>();
+
+            return ConfigureServices(services);
         }
 
         protected abstract IServiceProvider ConfigureServices(IServiceCollection services);
@@ -34,15 +44,6 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             {
                 await ProcessMessage(record, context);
             }
-        }
-
-        private IServiceProvider ConfigureFunctionServices(IServiceCollection services)
-        {
-            services.AddLogging();
-            services.AddTransient<IEnvironmentService, EnvironmentService>();
-            services.AddTransient<IConfigureService, ConfigureService>();
-
-            return ConfigureServices(services);
         }
 
         private async Task ProcessMessage(SQSEvent.SQSMessage record, ILambdaContext context)
@@ -70,7 +71,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
         {
             var messageData = sqsJsonMessage.Map() ?? throw new ArgumentException("SQS message data is null.");
 
-            var messageHandler = _serviceProvider.GetRequiredService<IMessageHandler>();
+            var messageHandler = ServiceProvider.GetRequiredService<IMessageHandler>();
             await messageHandler.HandleMessage(messageData, messageMetadata, _cancellationTokenSource.Token);
         }
     }
