@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Configuration;
+
 namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
     using System;
@@ -34,10 +36,31 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
         protected abstract IServiceProvider ConfigureServices(IServiceCollection services);
 
+        protected virtual LambdaOptions LoadOptions()
+        {
+            var options = new LambdaOptions();
+            ConfigureService.Configuration.Bind(options);
+            return options;
+        }
+
         public async Task Handler(SQSEvent sqsEvent, ILambdaContext context)
         {
+            var options = LoadOptions();
+            if (options.GracefulShutdownSeconds > 0)
+            {
+                if (options.GracefulShutdownSeconds >= context.RemainingTime.TotalSeconds)
+                {
+                    throw new InvalidOperationException($"Configured {nameof(options.GracefulShutdownSeconds)} must be smaller than maximum Lambda execution time. It's currently configured to start at {options.GracefulShutdownSeconds} seconds before termination, while there's only {context.RemainingTime.TotalMinutes} seconds left.");
+                }
+
+                var gracefulShutdownInSeconds = TimeSpan.FromSeconds(context.RemainingTime.TotalSeconds - options.GracefulShutdownSeconds);
+                _cancellationTokenSource.CancelAfter(gracefulShutdownInSeconds);
+            }
+            
             foreach (var record in sqsEvent.Records)
             {
+                _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                 await ProcessMessage(record, context);
             }
         }
@@ -46,8 +69,8 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
         {
             services.AddLogging();
             
-            services.AddTransient<IEnvironmentService, EnvironmentService>();
-            services.AddTransient<IConfigureService, ConfigureService>();
+            services.AddSingleton<IEnvironmentService, EnvironmentService>();
+            services.AddSingleton<IConfigureService, ConfigureService>();
 
             return ConfigureServices(services);
         }
