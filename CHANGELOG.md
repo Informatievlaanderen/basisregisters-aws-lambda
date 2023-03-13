@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.3.1...v1.4.0) (2023-03-13)
+
+
+### Features
+
+* add option to support graceful shutdown before termination ([4574c54](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/4574c542bfd9e690ded4ef9a19bc6230367c7c6d))
+
 ## [1.3.1](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.3.0...v1.3.1) (2022-12-09)
 
 
