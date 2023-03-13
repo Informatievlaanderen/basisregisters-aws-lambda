@@ -6,12 +6,12 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
 
     public class TestMessageHandler : IMessageHandler
     {
-        public Action<string> MessageGroupIdAction { get; set; }
-        public Action<object?> MessageDataAction { get; }
+        public Func<string, Task> MessageGroupIdAction { get; set; }
+        public Func<object?, Task> MessageDataAction { get; }
 
         public TestMessageHandler(
-            Action<string> messageGroupIdAction,
-            Action<object?> messageDataAction)
+            Func<string, Task> messageGroupIdAction,
+            Func<object?, Task> messageDataAction)
         {
             MessageGroupIdAction = messageGroupIdAction;
             MessageDataAction = messageDataAction;
@@ -22,8 +22,8 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
             await Task.Yield();
             var message = messageMetadata.Message;
             var messageGroupId = message?.Attributes["MessageGroupId"];
-            MessageGroupIdAction.Invoke(messageGroupId ?? string.Empty);
-            MessageDataAction.Invoke(messageData);
+            await MessageGroupIdAction.Invoke(messageGroupId ?? string.Empty);
+            await MessageDataAction.Invoke(messageData);
         }
     }
 }
