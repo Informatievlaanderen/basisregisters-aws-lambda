@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Configuration;
-
 namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
     using System;
@@ -11,6 +9,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
     using Amazon.Lambda.Serialization.Json;
     using Amazon.Lambda.SQSEvents;
     using Extensions;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
     public abstract class FunctionBase
@@ -53,8 +52,8 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
                     throw new InvalidOperationException($"Configured {nameof(options.GracefulShutdownSeconds)} must be smaller than maximum Lambda execution time. It's currently configured to start at {options.GracefulShutdownSeconds} seconds before termination, while there's only {context.RemainingTime.TotalMinutes} seconds left.");
                 }
 
-                var gracefulShutdownInSeconds = TimeSpan.FromSeconds(context.RemainingTime.TotalSeconds - options.GracefulShutdownSeconds);
-                _cancellationTokenSource.CancelAfter(gracefulShutdownInSeconds);
+                var gracefulShutdownTimeSpan = TimeSpan.FromSeconds(context.RemainingTime.TotalSeconds - options.GracefulShutdownSeconds);
+                _cancellationTokenSource.CancelAfter(gracefulShutdownTimeSpan);
             }
             
             foreach (var record in sqsEvent.Records)

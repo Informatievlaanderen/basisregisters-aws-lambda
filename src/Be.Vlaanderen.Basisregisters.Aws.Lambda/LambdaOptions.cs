@@ -1,6 +1,7 @@
-namespace Be.Vlaanderen.Basisregisters.Aws.Lambda;
-
-public class LambdaOptions
+namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
-    public double GracefulShutdownSeconds { get; set; }
+    public class LambdaOptions
+    {
+        public double GracefulShutdownSeconds { get; set; }
+    }
 }
