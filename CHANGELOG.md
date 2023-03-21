@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.4.0...v1.4.1) (2023-03-21)
+
+
+### Bug Fixes
+
+* make SQS message deserializing customizable ([e04036f](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/e04036fc3c05a725564b1b63de24b12d57328982))
+
 # [1.4.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.3.1...v1.4.0) (2023-03-13)
 
 
