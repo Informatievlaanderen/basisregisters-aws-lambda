@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-
 namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using Extensions;
@@ -27,30 +27,47 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
         public object? Map(IEnumerable<Assembly> messageAssemblies)
         {
+            var serializer = Newtonsoft.Json.JsonSerializer.CreateDefault();
+            serializer.CheckAdditionalContent = true;
+            return Map(messageAssemblies, serializer);
+        }
+
+        public object? Map(IEnumerable<Assembly> messageAssemblies, Newtonsoft.Json.JsonSerializer serializer)
+        {
+            ArgumentNullException.ThrowIfNull(serializer);
+
             var assembly = GetAssemblyNameContainingType(messageAssemblies, Type);
             var type = assembly?.GetType(Type);
 
-            return JsonConvert.DeserializeObject(Data, type!);
+            using (var reader = new JsonTextReader(new StringReader(Data)))
+            {
+                return serializer.Deserialize(reader, type);
+            }
         }
 
         public static SqsJsonMessage Create<T>([DisallowNull] T message, JsonSerializer serializer)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
+            ArgumentNullException.ThrowIfNull(message);
+            ArgumentNullException.ThrowIfNull(serializer);
 
-            if (serializer == null)
-            {
-                throw new ArgumentNullException(nameof(serializer));
-            }
+            var data = serializer.Serialize(message);
+            return new SqsJsonMessage(message.GetType().FullName!, data);
+        }
 
-            string data = serializer.Serialize(message);
+        public static SqsJsonMessage Create<T>([DisallowNull] T message, Newtonsoft.Json.JsonSerializer serializer)
+        {
+            ArgumentNullException.ThrowIfNull(message);
+            ArgumentNullException.ThrowIfNull(serializer);
+
+            var data = serializer.Serialize(message);
             return new SqsJsonMessage(message.GetType().FullName!, data);
         }
 
         private static Assembly? GetAssemblyNameContainingType(IEnumerable<Assembly> messageAssemblies, string typeName)
-            => messageAssemblies
+        {
+            ArgumentNullException.ThrowIfNull(messageAssemblies);
+
+            return messageAssemblies
                 .Select(x => new
                 {
                     Assembly = x,
@@ -59,5 +76,6 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
                 .Where(x => x.Type != null)
                 .Select(x => x.Assembly)
                 .FirstOrDefault();
+        }
     }
 }

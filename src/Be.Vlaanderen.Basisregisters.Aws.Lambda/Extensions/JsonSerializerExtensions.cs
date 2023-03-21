@@ -14,11 +14,18 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Extensions
             object value)
         {
             var newtonSoftJsonSerializer = new Newtonsoft.Json.JsonSerializer();
+            return newtonSoftJsonSerializer.Serialize(value);
+        }
+
+        public static string Serialize(
+            this Newtonsoft.Json.JsonSerializer jsonSerializer,
+            object value)
+        {
             var stringWriter = new StringWriter(new StringBuilder(256), CultureInfo.InvariantCulture);
             using (var jsonTextWriter = new JsonTextWriter(stringWriter))
             {
-                jsonTextWriter.Formatting = newtonSoftJsonSerializer.Formatting;
-                newtonSoftJsonSerializer.Serialize(jsonTextWriter, value, value.GetType());
+                jsonTextWriter.Formatting = jsonSerializer.Formatting;
+                jsonSerializer.Serialize(jsonTextWriter, value, value.GetType());
             }
 
             return stringWriter.ToString();
