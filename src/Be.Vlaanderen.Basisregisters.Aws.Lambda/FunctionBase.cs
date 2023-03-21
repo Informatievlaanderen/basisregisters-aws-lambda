@@ -41,6 +41,12 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             ConfigureService.Configuration.Bind(options);
             return options;
         }
+        
+        protected virtual SqsJsonMessage? DeserializeSqsMessage(SQSEvent.SQSMessage record)
+        {
+            var serializer = new JsonSerializer();
+            return serializer.Deserialize<SqsJsonMessage>(record.Body);
+        }
 
         public async Task Handler(SQSEvent sqsEvent, ILambdaContext context)
         {
@@ -78,9 +84,8 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
         {
             var logger = context.Logger;
             logger.LogDebug($"Process message: {record.Body}");
-
-            var serializer = new JsonSerializer();
-            var sqsJsonMessage = serializer.Deserialize<SqsJsonMessage>(record.Body);
+            
+            var sqsJsonMessage = DeserializeSqsMessage(record);
             if (sqsJsonMessage is not null)
             {
                 var groupId = record.Attributes["MessageGroupId"];
