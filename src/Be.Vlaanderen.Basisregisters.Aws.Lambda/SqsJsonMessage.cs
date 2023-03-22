@@ -1,14 +1,11 @@
-using System.Collections.Generic;
-
 namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Reflection;
-    using Extensions;
     using Newtonsoft.Json;
-    using JsonSerializer = Amazon.Lambda.Serialization.Json.JsonSerializer;
 
     public class SqsJsonMessage
     {
@@ -25,27 +22,20 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             Data = data;
         }
 
-        public object? Map(IEnumerable<Assembly> messageAssemblies)
+        public object? Map(IEnumerable<Assembly> messageAssemblies, JsonSerializerSettings jsonSerializerSettings)
         {
             var assembly = GetAssemblyNameContainingType(messageAssemblies, Type);
             var type = assembly?.GetType(Type);
 
-            return JsonConvert.DeserializeObject(Data, type!);
+            return JsonConvert.DeserializeObject(Data, type!, jsonSerializerSettings);
         }
 
-        public static SqsJsonMessage Create<T>([DisallowNull] T message, JsonSerializer serializer)
+        public static SqsJsonMessage Create<T>([DisallowNull] T message, JsonSerializerSettings jsonSerializerSettings)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
+            ArgumentNullException.ThrowIfNull(message);
+            ArgumentNullException.ThrowIfNull(jsonSerializerSettings);
 
-            if (serializer == null)
-            {
-                throw new ArgumentNullException(nameof(serializer));
-            }
-
-            string data = serializer.Serialize(message);
+            var data = JsonConvert.SerializeObject(message, jsonSerializerSettings);
             return new SqsJsonMessage(message.GetType().FullName!, data);
         }
 
