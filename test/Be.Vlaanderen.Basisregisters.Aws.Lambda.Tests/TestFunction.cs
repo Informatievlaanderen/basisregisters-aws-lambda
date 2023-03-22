@@ -4,7 +4,9 @@ using System.Reflection;
 namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
     public class TestFunction : FunctionBase
@@ -33,6 +35,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
 
         protected override IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IConfiguration>(x => new ConfigurationRoot(new Collection<IConfigurationProvider>()));
             services.AddTransient<IMessageHandler>(x => new TestMessageHandler(MessageGroupIdAction, MessageDataAction));
 
             return services.BuildServiceProvider();
