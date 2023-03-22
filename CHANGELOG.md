@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.4.1...v2.0.0) (2023-03-22)
+
+
+### Code Refactoring
+
+* use JsonSerializationSettings throughout library ([5cc42a0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/5cc42a092b182366d85c864a4d85a2574e5b6713))
+
+
+### BREAKING CHANGES
+
+* use JsonSerializationSettings in all static methods and in FunctionBase
+
 ## [1.4.1](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v1.4.0...v1.4.1) (2023-03-21)
 
 
