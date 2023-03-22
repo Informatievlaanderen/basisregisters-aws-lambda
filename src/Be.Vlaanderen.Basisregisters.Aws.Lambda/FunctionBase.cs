@@ -6,29 +6,31 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
     using System.Threading;
     using System.Threading.Tasks;
     using Amazon.Lambda.Core;
-    using Amazon.Lambda.Serialization.Json;
     using Amazon.Lambda.SQSEvents;
-    using Extensions;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Newtonsoft.Json;
 
     public abstract class FunctionBase
     {
         private readonly IEnumerable<Assembly> _messageAssemblies;
         private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly JsonSerializerSettings _jsonSerializerSettings;
 
         protected IServiceProvider ServiceProvider { get; }
-
-        public IConfigureService ConfigureService { get; set; }
+        protected IConfigureService ConfigureService { get; }
 
         /// <param name="messageAssemblies">The assemblies in which message contracts reside.</param>
-        protected FunctionBase(IEnumerable<Assembly> messageAssemblies)
+        /// <param name="jsonSerializerSettings">The newtonsoft JsonSerializer settings.</param>
+        protected FunctionBase(IEnumerable<Assembly> messageAssemblies, JsonSerializerSettings? jsonSerializerSettings = null)
         {
             _messageAssemblies = messageAssemblies;
             _cancellationTokenSource = new CancellationTokenSource();
 
             var services = new ServiceCollection();
             ServiceProvider = ConfigureFunctionServices(services);
+
+            _jsonSerializerSettings = jsonSerializerSettings ?? new JsonSerializerSettings();
 
             ConfigureService = ServiceProvider.GetRequiredService<IConfigureService>();
         }
@@ -40,12 +42,6 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             var options = new LambdaOptions();
             ConfigureService.Configuration.Bind(options);
             return options;
-        }
-        
-        protected virtual SqsJsonMessage? DeserializeSqsMessage(SQSEvent.SQSMessage record)
-        {
-            var serializer = new JsonSerializer();
-            return serializer.Deserialize<SqsJsonMessage>(record.Body);
         }
 
         public async Task Handler(SQSEvent sqsEvent, ILambdaContext context)
@@ -61,7 +57,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
                 var gracefulShutdownTimeSpan = TimeSpan.FromSeconds(context.RemainingTime.TotalSeconds - options.GracefulShutdownSeconds);
                 _cancellationTokenSource.CancelAfter(gracefulShutdownTimeSpan);
             }
-            
+
             foreach (var record in sqsEvent.Records)
             {
                 _cancellationTokenSource.Token.ThrowIfCancellationRequested();
@@ -73,7 +69,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
         private IServiceProvider ConfigureFunctionServices(IServiceCollection services)
         {
             services.AddLogging();
-            
+
             services.AddSingleton<IEnvironmentService, EnvironmentService>();
             services.AddSingleton<IConfigureService, ConfigureService>();
 
@@ -84,8 +80,8 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
         {
             var logger = context.Logger;
             logger.LogDebug($"Process message: {record.Body}");
-            
-            var sqsJsonMessage = DeserializeSqsMessage(record);
+
+            var sqsJsonMessage = JsonConvert.DeserializeObject<SqsJsonMessage>(record.Body, _jsonSerializerSettings);
             if (sqsJsonMessage is not null)
             {
                 var groupId = record.Attributes["MessageGroupId"];
@@ -102,7 +98,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
         private async Task ProcessSqsJsonMessage(SqsJsonMessage sqsJsonMessage, MessageMetadata messageMetadata)
         {
-            var messageData = sqsJsonMessage.Map(_messageAssemblies) ?? throw new ArgumentException("SQS message data is null.");
+            var messageData = sqsJsonMessage.Map(_messageAssemblies, _jsonSerializerSettings) ?? throw new ArgumentException("SQS message data is null.");
 
             var messageHandler = ServiceProvider.GetRequiredService<IMessageHandler>();
             await messageHandler.HandleMessage(messageData, messageMetadata, _cancellationTokenSource.Token);
