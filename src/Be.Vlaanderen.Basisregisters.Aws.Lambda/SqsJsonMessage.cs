@@ -39,7 +39,8 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             var assembly = GetAssemblyNameContainingType(messageAssemblies, Type);
             var type = assembly?.GetType(Type);
 
-            using (var reader = new JsonTextReader(new StringReader(Data)))
+            using (var streamReader = new StringReader(Data))
+            using (var reader = new JsonTextReader(streamReader))
             {
                 return serializer.Deserialize(reader, type);
             }
