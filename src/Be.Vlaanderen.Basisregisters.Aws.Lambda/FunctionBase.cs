@@ -22,7 +22,9 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
         /// <param name="messageAssemblies">The assemblies in which message contracts reside.</param>
         /// <param name="jsonSerializerSettings">The newtonsoft JsonSerializer settings.</param>
-        protected FunctionBase(IEnumerable<Assembly> messageAssemblies, JsonSerializerSettings? jsonSerializerSettings = null)
+        protected FunctionBase(
+            IEnumerable<Assembly> messageAssemblies,
+            JsonSerializerSettings? jsonSerializerSettings = null)
         {
             _messageAssemblies = messageAssemblies;
             _cancellationTokenSource = new CancellationTokenSource();
@@ -44,25 +46,48 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             return options;
         }
 
-        public async Task Handler(SQSEvent sqsEvent, ILambdaContext context)
+        public async Task Handler(object @event, ILambdaContext context)
         {
             var options = LoadOptions();
             if (options.GracefulShutdownSeconds > 0)
             {
                 if (options.GracefulShutdownSeconds >= context.RemainingTime.TotalSeconds)
                 {
-                    throw new InvalidOperationException($"Configured {nameof(options.GracefulShutdownSeconds)} must be smaller than maximum Lambda execution time. It's currently configured to start at {options.GracefulShutdownSeconds} seconds before termination, while there's only {context.RemainingTime.TotalMinutes} seconds left.");
+                    throw new InvalidOperationException(
+                        $"Configured {nameof(options.GracefulShutdownSeconds)} must be smaller than maximum Lambda execution time. It's currently configured to start at {options.GracefulShutdownSeconds} seconds before termination, while there's only {context.RemainingTime.TotalMinutes} seconds left.");
                 }
 
-                var gracefulShutdownTimeSpan = TimeSpan.FromSeconds(context.RemainingTime.TotalSeconds - options.GracefulShutdownSeconds);
+                var gracefulShutdownTimeSpan =
+                    TimeSpan.FromSeconds(context.RemainingTime.TotalSeconds - options.GracefulShutdownSeconds);
                 _cancellationTokenSource.CancelAfter(gracefulShutdownTimeSpan);
             }
 
-            foreach (var record in sqsEvent.Records)
+            switch (@event)
             {
-                _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                case SQSEvent sqsEvent:
+                {
+                    foreach (var record in sqsEvent.Records)
+                    {
+                        _cancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                await ProcessMessage(record, context);
+                        await ProcessMessage(record, context);
+                    }
+
+                    break;
+                }
+                case string eventString:
+                {
+                    var pingMessage = JsonConvert.DeserializeObject<PingEvent>(eventString, _jsonSerializerSettings);
+                    if (pingMessage is not null)
+                    {
+                        context.Logger.LogInformation("Ping received.");
+                        break;
+                    }
+
+                    throw new ArgumentException($"Unsupported event string: {eventString}");
+                }
+                default:
+                    throw new ArgumentException($"Unsupported event type: {@event.GetType().Name}");
             }
         }
 
@@ -98,7 +123,8 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
         private async Task ProcessSqsJsonMessage(SqsJsonMessage sqsJsonMessage, MessageMetadata messageMetadata)
         {
-            var messageData = sqsJsonMessage.Map(_messageAssemblies, _jsonSerializerSettings) ?? throw new ArgumentException("SQS message data is null.");
+            var messageData = sqsJsonMessage.Map(_messageAssemblies, _jsonSerializerSettings) ??
+                              throw new ArgumentException("SQS message data is null.");
 
             var messageHandler = ServiceProvider.GetRequiredService<IMessageHandler>();
             await messageHandler.HandleMessage(messageData, messageMetadata, _cancellationTokenSource.Token);
