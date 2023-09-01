@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v2.0.1...v3.0.0) (2023-09-01)
+
+
+### Features
+
+* change handler to handle more than sqs events + ping event ([e6485ac](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/e6485acb51268d03f32325d9c389220a24c0d764))
+
+
+### BREAKING CHANGES
+
+* Handler changed accepting parameters from SQSEvent to object
+
 ## [2.0.1](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v2.0.0...v2.0.1) (2023-03-22)
 
 
