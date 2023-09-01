@@ -2,6 +2,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
     using System;
     using System.Collections.Generic;
+    using System.Net.NetworkInformation;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     public abstract class FunctionBase
     {
@@ -74,6 +76,17 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
                     }
 
                     break;
+                }
+                case JObject jObject:
+                {
+                    var pingMessage = jObject.ToObject<Ping>();
+                    if (pingMessage is not null)
+                    {
+                        context.Logger.LogInformation("Ping received.");
+                        break;
+                    }
+
+                    throw new ArgumentException($"Unsupported JObject type: {jObject.Type}");
                 }
                 case string eventString:
                 {
