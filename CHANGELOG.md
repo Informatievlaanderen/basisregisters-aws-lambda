@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v3.0.0...v3.0.1) (2023-09-01)
+
+
+### Bug Fixes
+
+* handle JObject ([e66c622](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/e66c6224007aad79941a1bdd57c55f8c0a4a9eac))
+
 # [3.0.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v2.0.1...v3.0.0) (2023-09-01)
 
 
