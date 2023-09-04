@@ -1,3 +1,10 @@
+## [3.0.2](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v3.0.1...v3.0.2) (2023-09-04)
+
+
+### Bug Fixes
+
+* convert JObject to Sqs Event ([d66f154](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/d66f154dd01ea2cd2df92fc6a3026a9cf86b4bd8))
+
 ## [3.0.1](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v3.0.0...v3.0.1) (2023-09-01)
 
 
