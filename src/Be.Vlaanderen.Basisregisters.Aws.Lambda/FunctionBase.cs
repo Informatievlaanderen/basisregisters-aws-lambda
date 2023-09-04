@@ -47,7 +47,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
             return options;
         }
 
-        public async Task Handler(object @event, ILambdaContext context)
+        public async Task Handler(JObject @event, ILambdaContext context)
         {
             var options = LoadOptions();
             if (options.GracefulShutdownSeconds > 0)
@@ -63,45 +63,32 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
                 _cancellationTokenSource.CancelAfter(gracefulShutdownTimeSpan);
             }
 
-            switch (@event)
+            context.Logger.LogInformation($"Receiving event of type {@event.GetType().FullName}.");
+
+            if (@event.ContainsKey("Records") || @event.ContainsKey("records"))
             {
-                // case SQSEvent sqsEvent:
-                // {
-                //     foreach (var record in sqsEvent.Records)
-                //     {
-                //         _cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                //
-                //         await ProcessMessage(record, context);
-                //     }
-                //
-                //     break;
-                // }
-                case JObject jObject:
+                var sqsEvent = @event.ToObject<SQSEvent>();
+                if (sqsEvent is not null)
                 {
-                    var sqsEvent = jObject.ToObject<SQSEvent>();
-                    if (sqsEvent is not null)
+                    foreach (var record in sqsEvent.Records)
                     {
-                        foreach (var record in sqsEvent.Records)
-                        {
-                            _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                        _cancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                            await ProcessMessage(record, context);
-                        }
-
-                        break;
+                        await ProcessMessage(record, context);
                     }
-
-                    var pingMessage = jObject.ToObject<PingEvent>();
-                    if (pingMessage is not null)
-                    {
-                        context.Logger.LogInformation($"Ping: {pingMessage} received.");
-                        break;
-                    }
-
-                    throw new ArgumentException($"Unsupported JObject type: {jObject.Type}");
                 }
-                default:
-                    throw new ArgumentException($"Unsupported event type: {@event.GetType().Name}");
+            }
+            else if (@event.ContainsKey("Ping") || @event.ContainsKey("ping"))
+            {
+                var pingMessage = @event.ToObject<PingEvent>();
+                if (pingMessage is not null)
+                {
+                    context.Logger.LogInformation($"Ping: {pingMessage} received.");
+                }
+            }
+            else
+            {
+                throw new ArgumentException($"Unsupported JObject type: {@event.Type}");
             }
         }
 

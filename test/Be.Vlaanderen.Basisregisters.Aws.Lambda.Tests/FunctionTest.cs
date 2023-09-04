@@ -5,6 +5,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Newtonsoft.Json.Linq;
     using Xunit;
 
     public class FunctionTest
@@ -49,7 +50,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
                     receivedMessage = x;
                     return Task.CompletedTask;
                 });
-            await function.Handler(sqsEvent, context);
+            await function.Handler(JObject.FromObject(sqsEvent), context);
 
             Assert.Contains(serializedMessage, logger.Buffer.ToString());
             Assert.Equal(receivedMessageGroupId, messageGroupId);
@@ -95,7 +96,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
                 Logger = logger,
                 RemainingTime = TimeSpan.FromSeconds(2)
             };
-            
+
             var function = new TestFunction(
                 x => Task.CompletedTask,
                 async x =>
@@ -109,7 +110,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
                 );
             try
             {
-                await function.Handler(sqsEvent, context);
+                await function.Handler(JObject.FromObject(sqsEvent), context);
 
                 throw new Exception("Handler should be cancelled");
             }
