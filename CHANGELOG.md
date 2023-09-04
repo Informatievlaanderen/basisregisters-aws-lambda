@@ -1,3 +1,5 @@
+## [3.0.3](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v3.0.2...v3.0.3) (2023-09-04)
+
 ## [3.0.2](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v3.0.1...v3.0.2) (2023-09-04)
 
 
