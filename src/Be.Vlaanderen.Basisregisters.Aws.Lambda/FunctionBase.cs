@@ -2,7 +2,6 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 {
     using System;
     using System.Collections.Generic;
-    using System.Net.NetworkInformation;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
@@ -66,38 +65,40 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
             switch (@event)
             {
-                case SQSEvent sqsEvent:
-                {
-                    foreach (var record in sqsEvent.Records)
-                    {
-                        _cancellationTokenSource.Token.ThrowIfCancellationRequested();
-
-                        await ProcessMessage(record, context);
-                    }
-
-                    break;
-                }
+                // case SQSEvent sqsEvent:
+                // {
+                //     foreach (var record in sqsEvent.Records)
+                //     {
+                //         _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                //
+                //         await ProcessMessage(record, context);
+                //     }
+                //
+                //     break;
+                // }
                 case JObject jObject:
                 {
-                    var pingMessage = jObject.ToObject<Ping>();
+                    var sqsEvent = jObject.ToObject<SQSEvent>();
+                    if (sqsEvent is not null)
+                    {
+                        foreach (var record in sqsEvent.Records)
+                        {
+                            _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                            await ProcessMessage(record, context);
+                        }
+
+                        break;
+                    }
+
+                    var pingMessage = jObject.ToObject<PingEvent>();
                     if (pingMessage is not null)
                     {
-                        context.Logger.LogInformation("Ping received.");
+                        context.Logger.LogInformation($"Ping: {pingMessage} received.");
                         break;
                     }
 
                     throw new ArgumentException($"Unsupported JObject type: {jObject.Type}");
-                }
-                case string eventString:
-                {
-                    var pingMessage = JsonConvert.DeserializeObject<PingEvent>(eventString, _jsonSerializerSettings);
-                    if (pingMessage is not null)
-                    {
-                        context.Logger.LogInformation("Ping received.");
-                        break;
-                    }
-
-                    throw new ArgumentException($"Unsupported event string: {eventString}");
                 }
                 default:
                     throw new ArgumentException($"Unsupported event type: {@event.GetType().Name}");
