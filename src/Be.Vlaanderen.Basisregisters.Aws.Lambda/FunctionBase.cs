@@ -63,7 +63,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
                 _cancellationTokenSource.CancelAfter(gracefulShutdownTimeSpan);
             }
 
-            context.Logger.LogInformation($"Receiving event of type {@event.GetType().FullName}.");
+            context.Logger.Log($"Receiving event of type {@event.GetType().FullName}.");
 
             if (@event.ContainsKey("Records") || @event.ContainsKey("records"))
             {
@@ -83,7 +83,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
                 var pingMessage = @event.ToObject<PingEvent>();
                 if (pingMessage is not null)
                 {
-                    context.Logger.LogInformation($"Ping: {pingMessage} received.");
+                    context.Logger.Log($"Ping: {pingMessage} received.");
                 }
             }
             else
@@ -105,7 +105,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
         private async Task ProcessMessage(SQSEvent.SQSMessage record, ILambdaContext context)
         {
             var logger = context.Logger;
-            logger.LogDebug($"Process message: {record.Body}");
+            logger.Log($"Process message: {record.Body}");
 
             var sqsJsonMessage = JsonConvert.DeserializeObject<SqsJsonMessage>(record.Body, _jsonSerializerSettings);
             if (sqsJsonMessage is not null)
@@ -119,7 +119,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
                 });
             }
 
-            logger.LogDebug($"Processed message: {record.Body}");
+            logger.Log($"Processed message: {record.Body}");
         }
 
         private async Task ProcessSqsJsonMessage(SqsJsonMessage sqsJsonMessage, MessageMetadata messageMetadata)

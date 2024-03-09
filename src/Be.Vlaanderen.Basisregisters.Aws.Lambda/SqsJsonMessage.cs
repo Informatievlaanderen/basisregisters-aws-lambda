@@ -32,8 +32,10 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
 
         public static SqsJsonMessage Create<T>([DisallowNull] T message, JsonSerializerSettings jsonSerializerSettings)
         {
-            ArgumentNullException.ThrowIfNull(message);
-            ArgumentNullException.ThrowIfNull(jsonSerializerSettings);
+            if (message == null)
+                throw new ArgumentNullException(nameof(message));
+            if (jsonSerializerSettings == null)
+                throw new ArgumentNullException(nameof(jsonSerializerSettings));
 
             var data = JsonConvert.SerializeObject(message, jsonSerializerSettings);
             return new SqsJsonMessage(message.GetType().FullName!, data);
