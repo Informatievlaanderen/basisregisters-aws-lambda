@@ -8,7 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{54FB7088-C2D3-4F97-9852-823895A8B87C}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		build.fsx = build.fsx
 		build.sh = build.sh
 		global.json = global.json
 		paket.dependencies = paket.dependencies

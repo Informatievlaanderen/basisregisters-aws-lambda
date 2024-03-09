@@ -83,7 +83,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda
                 var pingMessage = @event.ToObject<PingEvent>();
                 if (pingMessage is not null)
                 {
-                    context.Logger.LogInformation($"Ping: {pingMessage} received.");
+                    context.Logger.LogDebug($"Ping: {pingMessage} received.");
                 }
             }
             else

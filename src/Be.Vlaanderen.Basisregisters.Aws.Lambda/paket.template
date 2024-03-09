@@ -15,7 +15,7 @@ licenseUrl https://opensource.org/licenses/MIT
 description AWS Lambda utilities for C#.
 
 dependencies
-  framework: net6.0
+  framework: net8.0
     Microsoft.Extensions.Logging >= LOCKEDVERSION
     AWSSDK.Core >= LOCKEDVERSION
     AWSSDK.SQS >= LOCKEDVERSION
@@ -30,5 +30,5 @@ dependencies
     Microsoft.Extensions.Logging >= LOCKEDVERSION
 
 files
-  bin\Release\net6.0\Be.Vlaanderen.Basisregisters.Aws.Lambda.dll => lib\net6.0
-  bin\Release\net6.0\Be.Vlaanderen.Basisregisters.Aws.Lambda.pdb => lib\net6.0
+  Be.Vlaanderen.Basisregisters.Aws.Lambda.dll => lib\net8.0
+  Be.Vlaanderen.Basisregisters.Aws.Lambda.pdb => lib\net8.0
