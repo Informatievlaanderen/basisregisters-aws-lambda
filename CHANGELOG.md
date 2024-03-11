@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v3.0.3...v4.0.0) (2024-03-11)
+
+
+### Features
+
+* move to dotnet 8.0.2 ([e49dbf7](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/e49dbf7050bce7d516138ac03819a8afeec02fe1))
+
+
+### BREAKING CHANGES
+
+* move to dotnet 8.0.2
+
 ## [3.0.3](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v3.0.2...v3.0.3) (2023-09-04)
 
 ## [3.0.2](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v3.0.1...v3.0.2) (2023-09-04)
