@@ -1,3 +1,15 @@
+# [5.0.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v4.0.0...v5.0.0) (2025-04-09)
+
+
+### Code Refactoring
+
+* use renovate and nuget + update pipeline ([85b25b8](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/85b25b81e68c5d41148fe5c05a059da5cd71de01))
+
+
+### BREAKING CHANGES
+
+* update to dotnet 9
+
 # [4.0.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v3.0.3...v4.0.0) (2024-03-11)
 
 
