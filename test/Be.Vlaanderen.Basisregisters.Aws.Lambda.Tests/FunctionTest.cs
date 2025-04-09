@@ -53,7 +53,7 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
             await function.Handler(JObject.FromObject(sqsEvent), context);
 
             Assert.Contains(serializedMessage, logger.Buffer.ToString());
-            Assert.Equal(receivedMessageGroupId, messageGroupId);
+            Assert.Equal(messageGroupId, receivedMessageGroupId);
             Assert.NotNull(receivedMessage);
             Assert.IsType<MockMessage>(receivedMessage);
             Assert.Equal(Guid.Parse("020c172d-eceb-42ac-b9e4-ab7f3be23999"), ((MockMessage)receivedMessage!).Id);
@@ -124,6 +124,6 @@ namespace Be.Vlaanderen.Basisregisters.Aws.Lambda.Tests
     public class MockMessage
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public required string Name { get; set; }
     }
 }
