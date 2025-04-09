@@ -1,0 +1,27 @@
+<Project>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageVersion Include="Amazon.Lambda.Core" Version="2.5.1" />
+        <PackageVersion Include="Amazon.Lambda.Serialization.Json" Version="2.2.4" />
+        <PackageVersion Include="Amazon.Lambda.SQSEvents" Version="2.2.0" />
+
+        <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.3" />
+        <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.3" />
+        <PackageVersion Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.3" />
+        <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.3" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
+        <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.3" />
+
+        <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+        <PackageVersion Include="xunit" Version="2.9.3" />
+        <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.2" />
+
+        <PackageVersion Include="SourceLink.Embed.AllSourceFiles" Version="2.8.3" />
+        <PackageVersion Include="SourceLink.Copy.PdbFiles" Version="2.8.3" />
+    </ItemGroup>
+</Project>
