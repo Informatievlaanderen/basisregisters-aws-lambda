@@ -4,9 +4,9 @@
     "net9.0": {
       "Amazon.Lambda.Core": {
         "type": "Direct",
-        "requested": "[2.5.1, )",
-        "resolved": "2.5.1",
-        "contentHash": "84MTU67ZU+KMaT8V2C/76UCu3J77hTrDpiThlvUQLiNQMtpfF+9yHdVC4GEtoWGOGtItOaoBB0sdEE2V13qL9Q=="
+        "requested": "[2.7.1, )",
+        "resolved": "2.7.1",
+        "contentHash": "wY/QoGcgxWyyqGs7TWhdtIvR38IGQzxiWMZ5Pv5LU2WJvE2KzVjcgz8koL9CQX7T5wNpVoKZpxMvKZcHOYyDPQ=="
       },
       "Amazon.Lambda.SQSEvents": {
         "type": "Direct",
@@ -192,7 +192,7 @@
       "be.vlaanderen.basisregisters.aws.lambda": {
         "type": "Project",
         "dependencies": {
-          "Amazon.Lambda.Core": "[2.5.1, )",
+          "Amazon.Lambda.Core": "[2.7.1, )",
           "Amazon.Lambda.SQSEvents": "[2.2.0, )",
           "Amazon.Lambda.Serialization.Json": "[2.2.4, )",
           "Microsoft.Extensions.Configuration.Binder": "[9.0.3, )",
