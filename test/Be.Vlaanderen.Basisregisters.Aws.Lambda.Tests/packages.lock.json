@@ -4,15 +4,15 @@
     "net9.0": {
       "Amazon.Lambda.Core": {
         "type": "Direct",
-        "requested": "[2.5.1, )",
-        "resolved": "2.5.1",
-        "contentHash": "84MTU67ZU+KMaT8V2C/76UCu3J77hTrDpiThlvUQLiNQMtpfF+9yHdVC4GEtoWGOGtItOaoBB0sdEE2V13qL9Q=="
+        "requested": "[2.8.1, )",
+        "resolved": "2.8.1",
+        "contentHash": "wLrBdUXY1jn12o3+sar5c5ApMJPGEMye+1rnyDjwCKA2rcPNMZbNsKLQ76bV+DGnx5CN8bArB26SKB/rEuxIxQ=="
       },
       "Amazon.Lambda.SQSEvents": {
         "type": "Direct",
-        "requested": "[2.2.0, )",
-        "resolved": "2.2.0",
-        "contentHash": "RyYLgEa6nh+VJrCfTDKxvTLS1+eLDIIDyHgwDY3TR1WQz1+UeDIcccOJvoDk2nmjkSA0TfWJmZX9Ld0ySf57lA=="
+        "requested": "[2.2.1, )",
+        "resolved": "2.2.1",
+        "contentHash": "DnDW50+hggx+mQm7uphftCUJqSk9M68Dv+PVqRVd+f3soxYksFk+9QRZHmjBkh3+yG1JPGUPcPBqxOMGcfcA2w=="
       },
       "Amazon.Lambda.TestUtilities": {
         "type": "Direct",
@@ -192,9 +192,9 @@
       "be.vlaanderen.basisregisters.aws.lambda": {
         "type": "Project",
         "dependencies": {
-          "Amazon.Lambda.Core": "[2.5.1, )",
-          "Amazon.Lambda.SQSEvents": "[2.2.0, )",
-          "Amazon.Lambda.Serialization.Json": "[2.2.4, )",
+          "Amazon.Lambda.Core": "[2.8.1, )",
+          "Amazon.Lambda.SQSEvents": "[2.2.1, )",
+          "Amazon.Lambda.Serialization.Json": "[2.2.5, )",
           "Microsoft.Extensions.Configuration.Binder": "[9.0.3, )",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "[9.0.3, )",
           "Microsoft.Extensions.Configuration.FileExtensions": "[9.0.3, )",
@@ -205,11 +205,11 @@
       },
       "Amazon.Lambda.Serialization.Json": {
         "type": "CentralTransitive",
-        "requested": "[2.2.4, )",
-        "resolved": "2.2.4",
-        "contentHash": "xeOfdXmdxSTNKtv0ZMnd6PejmjgxHV3NLJNTARUI+Z2mcJ5eBHsT6vp3bhlXrvBYKt2zbF7+Q2EfQ0RtNJjQUQ==",
+        "requested": "[2.2.5, )",
+        "resolved": "2.2.5",
+        "contentHash": "/kCLswbuQPmvupmRMWtQfZ3Q22dm14eOL8c1ihmPxxhdnzyucQ4CfuAcovxg2Pxogt3tnZfd3QOwSN1uarmHdg==",
         "dependencies": {
-          "Amazon.Lambda.Core": "2.3.0",
+          "Amazon.Lambda.Core": "2.8.0",
           "Newtonsoft.Json": "13.0.1"
         }
       },
