@@ -127,7 +127,7 @@ jobs:
         pip install requests markdown argparse
 
     - name: Download NuGet aws lambda
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       continue-on-error: false
       with:
         name: nuget-Be.Vlaanderen.Basisregisters.Aws.Lambda-${{ needs.set-release-version.outputs.version }}
@@ -176,7 +176,7 @@ jobs:
       run: dotnet --info
 
     - name: Download NuGet aws lambda
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: nuget-Be.Vlaanderen.Basisregisters.Aws.Lambda-${{ needs.release.outputs.version }}
         path: ~/
