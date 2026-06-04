@@ -1,3 +1,15 @@
+# [6.0.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v5.0.0...v6.0.0) (2026-06-04)
+
+
+### Features
+
+* update packages + upgrade to dotnet 10 ([35df83a](https://github.com/informatievlaanderen/basisregisters-aws-lambda/commit/35df83a5e72a9a5691867087e9af3284c3189bbb))
+
+
+### BREAKING CHANGES
+
+* update to dotnet 10
+
 # [5.0.0](https://github.com/informatievlaanderen/basisregisters-aws-lambda/compare/v4.0.0...v5.0.0) (2025-04-09)
 
 
